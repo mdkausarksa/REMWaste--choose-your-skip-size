@@ -32,13 +32,13 @@ export default function SkipSelector() {
     return <div className='text-center py-10'>No skips available.</div>
 
   return (
-    <div className='flex flex-col md:flex-row gap-6 mt-10 mx-auto w-11/12'>
+    <div className='flex flex-col md:flex-row gap-6 mt-10 mx-auto w-10/12'>
       {/* Cards Grid: 2 columns on desktop, 1 on mobile */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 flex-1'>
         {skips.map((skip) => (
           <div
             key={skip.id}
-            className={`border rounded-xl p-5 shadow bg-[#181A20] ${
+            className={`border rounded-xl p-6 shadow bg-[#181A20] ${
               selected && selected.id === skip.id
                 ? 'border-blue-500 ring-2 ring-blue-200'
                 : 'border-gray-700'

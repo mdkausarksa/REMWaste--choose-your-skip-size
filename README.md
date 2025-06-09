@@ -3,7 +3,7 @@
 This is a React.js project submitted as part of a frontend development challenge to redesign the **"Choose Your Skip Size"** page from [WeWantWaste.co.uk](https://wewantwaste.co.uk).
 
 > 🚀 View Demo: [Live Preview](#)  
-> 🧪 Sandbox: [CodeSandbox Link](#)
+> 🧪 Sandbox: [CodeSandbox Link](https://codesandbox.io/p/sandbox/github/mdkausarksa/REMWaste--choose-your-skip-size)
 
 ---
 
@@ -71,4 +71,3 @@ Skip data is fetched from:
 
 ---
 
-## 📁 Folder Structure

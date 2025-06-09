@@ -8,6 +8,7 @@ export default function SkipSelector() {
   const [skips, setSkips] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showMobilePanel, setShowMobilePanel] = useState(false)
 
   useEffect(() => {
     async function fetchSkips() {
@@ -47,7 +48,7 @@ export default function SkipSelector() {
             <div className='relative mb-4'>
               <img
                 src={
-                  selected.image ||
+                  skip.image ||
                   'https://yozbrydxdlcxghkphhtq.supabase.co/storage/v1/object/public/skips/skip-sizes/4-yarder-skip.jpg'
                 }
                 alt={`${skip.size} Yard Skip`}
@@ -70,13 +71,18 @@ export default function SkipSelector() {
             </div>
             <button
               className={`w-full py-3 rounded-lg font-semibold transition
-    ${
-      selected && selected.id === skip.id
-        ? 'bg-blue-700 text-white'
-        : 'bg-gray-800 text-white hover:bg-blue-800'
-    }
-  `}
-              onClick={() => setSelected(skip)}
+                ${
+                  selected && selected.id === skip.id
+                    ? 'bg-blue-700 text-white'
+                    : 'bg-gray-800 text-white hover:bg-blue-800'
+                }
+              `}
+              onClick={(e) => {
+                e.stopPropagation()
+                setSelected(skip)
+                // Show details panel on mobile when selecting a skip
+                if (window.innerWidth < 768) setShowMobilePanel(true)
+              }}
             >
               Select This Skip &rarr;
             </button>
@@ -84,7 +90,8 @@ export default function SkipSelector() {
         ))}
       </div>
 
-      <div className='md:w-1/3 w-full md:sticky md:top-6 h-fit'>
+      {/* Sticky Card for Desktop */}
+      <div className='md:w-1/3 w-full md:sticky md:top-6 h-fit hidden md:block'>
         <div className='rounded-xl border border-blue-200 bg-white shadow-xl sticky top-6 overflow-hidden'>
           <div className='bg-gradient-to-br from-gray-900 to-gray-900 p-5 flex flex-col items-center'>
             <img
@@ -96,7 +103,6 @@ export default function SkipSelector() {
               className='w-full object-contain rounded-md mb-3 shadow'
             />
           </div>
-
           <div className='px-6 py-4'>
             <div className='flex justify-between text-sm mb-1 text-gray-500'>
               <span>Yard Skip</span>
@@ -112,8 +118,6 @@ export default function SkipSelector() {
             </div>
             <div className='flex justify-between text-lg font-bold border-t pt-3 text-gray-400'></div>
           </div>
-
-          {/* Pay Button */}
           <div className='px-6 pb-6 space-x-4 grid-cols-2 mx-auto flex items-center justify-center'>
             <button
               onClick={() => setSelected('')}
@@ -127,6 +131,66 @@ export default function SkipSelector() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Expandable Sticky Card */}
+      {showMobilePanel && (
+        <div className='fixed inset-0 z-40 flex items-end md:hidden'>
+          {/* Overlay */}
+          <div
+            className='absolute inset-0 bg-black bg-opacity-40'
+            onClick={() => setShowMobilePanel(false)}
+          />
+          {/* Panel */}
+          <div className='relative w-full bg-white rounded-t-2xl shadow-2xl p-4 animate-slide-up'>
+            <div className='bg-gradient-to-br from-gray-900 to-gray-900 p-5 flex flex-col items-center rounded-xl'>
+              <img
+                src={
+                  selected?.image ||
+                  'https://yozbrydxdlcxghkphhtq.supabase.co/storage/v1/object/public/skips/skip-sizes/4-yarder-skip.jpg'
+                }
+                alt={selected?.name || 'Card'}
+                className='w-full object-contain rounded-md mb-3 shadow'
+              />
+            </div>
+            <div className='px-2 py-4'>
+              <div className='flex justify-between text-sm mb-1 text-gray-500'>
+                <span>Yard Skip</span>
+                <span>{selected?.size || '00.00'}</span>
+              </div>
+              <div className='flex justify-between text-sm mb-1 text-gray-500'>
+                <span>Hire Period</span>
+                <span>{selected?.hire_period_days || '00.00'}</span>
+              </div>
+              <div className='flex justify-between text-sm mb-3 text-gray-500'>
+                <span>Price</span>
+                <span>€ {selected?.price_before_vat || '00'}</span>
+              </div>
+            </div>
+            <div className='px-2 pb-2 space-x-4 grid-cols-2 mx-auto flex items-center justify-center'>
+              <button
+                onClick={() => setShowMobilePanel(false)}
+                className='w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition'
+              >
+                Close
+              </button>
+              <button className='w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition'>
+                Continue →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Optional: Add this CSS for a smooth slide-up animation */}
+      <style>{`
+        @keyframes slide-up {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.35s cubic-bezier(.4,0,.2,1);
+        }
+      `}</style>
     </div>
   )
 }
